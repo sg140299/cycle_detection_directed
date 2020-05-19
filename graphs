@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define N 100005
+int V;
+vector<int>adj[N];
+void add_edge(int x,int y){
+    adj[x].push_back(y);
+}
+bool dfs_helper(int node,int *visited,int *stack){
+    visited[node]=1;
+    stack[node]=1;
+    for(auto nbr:adj[node]){
+        if(visited[nbr]==0){
+        //call cycle detection from neigh 
+            return dfs_helper(nbr,visited,stack);
+        }
+        //if this nbr is laready in path
+        else if(stack[nbr]){
+            return true;
+        }
+    }
+    return false;
+}
+bool cycle_detect_dfs(){
+    int visited[V+1]={0};
+    int stack[V+1]={0};
+    return dfs_helper(1,visited,stack);
+}
+int main(){
+    add_edge(1,2);
+    add_edge(2,3);
+    add_edge(3,1);
+    add_edge(3,4);
+    add_edge(4,6);
+    add_edge(5,6);
+    add_edge(2,5);
+    V=6;
+    if (cycle_detect_dfs()) cout<<"Yes cycle is present";
+    else cout<<"No cycle is present";
+    return 0;
+}
